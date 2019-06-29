@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Full Stack Project</title>
+  <link href="./style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <h2>Add new stock:</h2>
+  <form class="newStock">
+    <label for="partName">part name</label>
+    <input type="text" id="partName" name="partName" required autofocus />
+
+    <label for="universalCode">universal code</label>
+    <input type="number" id="universalCode" name="universalCode" required />
+
+    <label for="partPrice">part price</label>
+    <input type="number" id="partPrice" name="partPrice" required />
+
+    <label for="stock">starting stock</label>
+    <input type="range" min="1" max="1000" step="1" onchange="updateTextInput(this.value);" id="stock" name="stock"
+      required />
+    <input type="text" id="textInput" value=""></br>
+    <input type="submit" value="ADD" />
+  </form>
+
+  <hr>
+
+  <h2>Modify any data (not ID) in any table any column</h2>
+  <form class="updateData">
+
+    <!--
+        
+        1. select table where you want to update record (this is hard coded)
+        2. select record from this table to be updated (ID)
+        3. select column to be updated for this ID
+        4. give new value
+        5. UPDATE
+
+      -->
+    <label for="table">select table</label>
+    <select id="table" name="table">
+      <option value="parts">parts table</option>
+      <option value="cars">cars table</option>
+      <option value="customers">customers table</option>
+    </select>
+
+    <label for="id">record ID</label>
+    <input type="number" id="id" name="id" required placeholder="enter id of record" />
+
+    <label for="column">column name</label>
+    <input type="text" id="column" name="column" required placeholder="enter column name" />
+
+    <label for="newValue">new value</label>
+    <input type="text" id="newValue" name="newValue" required placeholder="enter new value" />
+    <br>
+    <input type="submit" value="UPDATE" />
+  </form>
+
+  <hr>
+
+  <h2 class="allParts">All auto parts currently in database: </h2>
+  <table class="partsTable">
+    <thead>
+      <tr>
+        <td>ID:</td>
+        <td>part name:</td>
+        <td>universal code:</td>
+        <td>part price:</td>
+        <td>current stock:</td>
+        <td>delete record:</td>
+      </tr>
+    </thead>
+    <tbody class="parts">
+
+    </tbody>
+  </table>
+
+  <script>
+
+
+    //on load of window, show all auto parts in database
+    window.onload = () => {
+
+      let countParts = document.querySelector('.allParts');
+      countPartsQuery();
+
+      function countPartsQuery() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:5000/parts', true);
+        xhr.onload = function () {
+          let rows = JSON.parse(this.response); //same as xhr.response
+          //console.log(rows.length);
+          countParts.innerHTML = `Current number of auto parts: ${rows.length}`;
+        }
+        xhr.send();
+      }
+
+
+
+      let partsToFill = document.querySelector('.parts');
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://localhost:5000/parts', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      /* xhr.onload = (event) => {
+        
+        if (event.target.status === 200 && event.target.readyState === 4) {
+          console.log(event);
+          let partsTable = JSON.parse(xhr.response);
+          console.log(partsTable);
+          partsTable.forEach(part => {
+            let newRow = document.createElement('tr');
+
+            let newPartName = document.createElement('td');
+            newPartName.textContent = part.partName;
+
+            let newUniversalCode = document.createElement('td');
+            newUniversalCode.textContent = part.universalCode;
+
+            let newStock = document.createElement('td');
+            newStock.textContent = part.stock;
+
+            newRow.appendChild(newPartName);
+            newRow.appendChild(newUniversalCode);
+            newRow.appendChild(newStock);
+
+            partsToFill.appendChild(newRow);
+
+          });
+
+        }else{
+          console.log(`Error with xhr connection. STATUS: ${event.target.status}, READYSTATE: ${event.target.readyState}.`);
+        }
+
+        
+      } */
+
+      xhr.onload = function () {
+
+        if (this.status === 200 && this.readyState === 4) { // "this" here is the same as "event.target" above. "this" is also the same as "xhr" here.
+          //console.log(this);
+          let partsTable = JSON.parse(this.response); // same as JSON.parse(xhr.response);
+          //console.log(partsTable);
+          partsTable.forEach(part => {
+
+            let newRow = document.createElement('tr');
+
+            let newID = document.createElement('td');
+            newID.textContent = part.id;
+
+            let newPartName = document.createElement('td');
+            newPartName.textContent = part.partName;
+
+            let newUniversalCode = document.createElement('td');
+            newUniversalCode.textContent = part.universalCode;
+
+            let newPartPrice = document.createElement('td');
+            newPartPrice.textContent = part.partPrice;
+
+            let newStock = document.createElement('td');
+            newStock.textContent = part.stock;
+
+            //we create the delete BUTTON for each record, with each cycle,
+            //so at the XHR DELETE request below, the delete button is bound to the ${part.id} of the record!  
+            let newDeleteButton = document.createElement('button');
+            newDeleteButton.textContent = 'delete';
+            newDeleteButton.addEventListener('click', (event) => {
+
+              let xhr = new XMLHttpRequest();
+              xhr.open('DELETE', `http://localhost:5000/delete/parts/${part.id}`, true);
+              xhr.onload = function () {
+                window.alert('Record successfully deleted!');
+                location.reload(); //this refreshes the window
+              };
+              xhr.send();
+            });
+
+            newRow.appendChild(newID);
+            newRow.appendChild(newPartName);
+            newRow.appendChild(newUniversalCode);
+            newRow.appendChild(newPartPrice);
+            newRow.appendChild(newStock);
+            newRow.appendChild(newDeleteButton);
+
+            partsToFill.appendChild(newRow);
+
+          });
+
+        } else {
+          console.log(`Error with xhr connection. STATUS: ${this.status}, READYSTATE: ${this.readyState}.`);
+        }
+
+
+      }
+
+      xhr.send();
+    };
+
+    // this is needed for the range slider @ "Add new stock:"
+    function updateTextInput(x) {
+      document.getElementById('textInput').value = x;
+    }
+
+
+    // add new stock
+    let addStockForm = document.querySelector('.newStock');
+    addStockForm.addEventListener('submit', (event) => {
+      //event.preventDefault(); //<-- only used for de-bugging
+      let formData = event.target.elements;
+      let bodyToSend = {
+        partName: formData.partName.value,
+        universalCode: formData.universalCode.value,
+        partPrice: formData.partPrice.value,
+        stock: formData.stock.value
+      };
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:5000/post', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = function () {
+        let message = JSON.parse(this.response);
+        window.alert(message.info);
+
+
+      }
+      xhr.send(JSON.stringify(bodyToSend));
+    });
+
+    // update any data type in any table any column, based on record ID
+    let updateDataForm = document.querySelector('.updateData');
+    updateDataForm.addEventListener('submit', (event) => {
+      //event.preventDefault(); //<-- only used for de-bugging
+      let formData = event.target.elements;
+      //console.log(formData.table.value);
+      let bodyToSend = {
+        table: formData.table.value,
+        id: formData.id.value,
+        column: formData.column.value,
+        newValue: formData.newValue.value
+      };
+
+      let table = formData.table.value;
+      let id = formData.id.value;
+      let column = formData.column.value;
+      let newValue = formData.newValue.value;
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('PUT', `http://localhost:5000/post/${table}/${id}/${column}/${newValue}`, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = function () {
+        let message = JSON.parse(this.response);
+        window.alert(message.info);
+
+
+      }
+      xhr.send(JSON.stringify(bodyToSend));
+    });
+
+
+
+
+
+    // when POSTing via xhr, you need to use the setRequestHeader(); method after open(); but before send();
+    // specify what kind of data you are sending inside the req.body
+    // examples:
+    // xhr.setRequestHeader('Content-Type', 'application/json');
+    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  </script>
+</body>
+
+</html>

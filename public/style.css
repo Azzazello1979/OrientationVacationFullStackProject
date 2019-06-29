@@ -1,0 +1,37 @@
+body{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.newStock{
+  display:flex;
+  flex-direction: column;
+}
+
+.partsTable, .newStock, .updateData{
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.partsTable thead{
+  font-weight: bold;
+}
+
+.partsTable td{
+  padding: 5px;
+}
+
+.updateData{
+  display:flex;
+  flex-direction: column;
+}
+
+input, select{
+  padding:5px;
+  margin:5px;
+}
+
+
