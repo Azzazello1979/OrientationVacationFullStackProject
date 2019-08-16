@@ -3,6 +3,7 @@
 
 //const Joi = require('joi');
 //const validator = require('express-joi-validation')({});
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
@@ -17,9 +18,13 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+require('./startup/prod')(app); // preparing for heroku
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 
 // TEST SERVER
 app.get('/test', (req, res) => {
@@ -29,6 +34,7 @@ app.get('/test', (req, res) => {
 // modules & middlewares & db connection
 // write BELOW this line
 
+app
 
 // delete record from any table based on ID
 app.delete('/delete/:table/:id', (req, res) => {
@@ -121,7 +127,19 @@ app.put('/post/:table/:id/:column/:newValue', (req, res) => {
 
 });
 
+// you send key-value pairs in the req.body, but instead you can also send
+// info in the URL: req.query & req.params
+// sending key-value pair in the URL is req.query
+app.post('/post', (req,res) => {
+  let reqObj = req.query;
+  res.status(200).send(reqObj);
+})
 
+// sending a single value in the URL is req.params
+app.post('/post/:requestParameter', (req,res) => {
+  let requestParameter = req.params.requestParameter;
+  res.status(200).send(requestParameter);
+})
 
 // insert records into "parts" table. ( specify partName, universalCode, starting stock in request )
 app.post('/post', (req, res) => {
