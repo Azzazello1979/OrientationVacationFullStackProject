@@ -1,8 +1,8 @@
 body{
   display:flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /*justify-content: center; */
+  /*align-items: center; */
 }
 
 .dropbtn{
@@ -17,6 +17,8 @@ body{
 .dropdown{
   display:flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   margin-bottom: 10px;
 }
 
@@ -53,6 +55,9 @@ body{
 .newStock{
   display:flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 .partsTable, .newStock, .updateData{
@@ -71,7 +76,8 @@ body{
 
 .updateData{
   display:flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 input, select{
