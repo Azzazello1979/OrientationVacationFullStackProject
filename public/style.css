@@ -6,7 +6,7 @@ body{
 }
 
 .dropbtn{
-  background-color: yellow;
+  background-color: #eac365;
   color: black;
   border: 1px solid black;
   border-radius: 5px;
@@ -36,24 +36,37 @@ body{
 }
 
 /* change color of dropdown links on hover */
-.dropdown-content a:hover{background-color: green;}
+.dropdown-content a:hover{background-color: #f8edd0;}
 
 /* show dropdown menu on hover */
 .dropdown:hover .dropdown-content {display:block;}
 
 /* change background color of dropdown button when dropdown content is shown  */
-.dropdown:hover .dropbtn {background-color:grey;}
+.dropdown:hover .dropbtn {background-color:#d2af5a;}
 
 
-.customersFormDiv{
+
+
+
+
+
+
+
+.customersFormDiv, .carsFormDiv, .partsFormDiv{
   display:none;
+  margin-bottom:10px;
 }
-
-
-.customersInputForm{
+.customersInputForm, .carsInputForm, .partsInputForm{
   display:block;
   background-color: white;
 }
+
+
+
+
+
+
+
 
 .newStock{
   display:flex;
@@ -63,7 +76,7 @@ body{
   
 }
 
-.partsTable, .newStock, .updateData .customersInputForm{
+.partsTable, .newStock, .updateData{
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 20px;

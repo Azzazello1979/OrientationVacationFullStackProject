@@ -37,7 +37,39 @@
       <label for="email">em@il:</label>
       <input type="text" id="email" name="email" required placeholder="enter email" />
       <input type="submit" value="Save New Customer" />
-      <input class="collapseCustomer" type="submit" value="Collapse" />
+      <input class="collapseCustomers" type="submit" value="Collapse" />
+    </form>
+  </div>
+
+  <div class="carsFormDiv">
+    <form class="carsInputForm">
+      <label for="make">Make:</label>
+      <input type="text" id="make" name="make" required placeholder="make" />
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" required placeholder="model" />
+      <label for="year">Year:</label>
+      <input type="number" id="year" name="year" required placeholder="year" />
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" required placeholder="price" />
+      <label for="stock">Stock:</label>
+      <input type="number" id="stock" name="stock" required placeholder="stock" />
+      <input type="submit" value="Add new car" />
+      <input class="collapseCars" type="submit" value="Collapse" />
+    </form>
+  </div>
+
+  <div class="partsFormDiv">
+    <form class="partsInputForm">
+      <label for="partName">Part name:</label>
+      <input type="text" id="partName" name="partName" required placeholder="partName" />
+      <label for="stock">Stock:</label>
+      <input type="number" id="stock" name="stock" required placeholder="stock" />
+      <label for="universalCode">Universal code:</label>
+      <input type="number" id="universalCode" name="universalCode" required placeholder="universalCode" />
+      <label for="partPrice">Price:</label>
+      <input type="number" id="partPrice" name="partPrice" required placeholder="partPrice" />
+      <input type="submit" value="Add new part" />
+      <input class="collapseParts" type="submit" value="Collapse" />
     </form>
   </div>
 
@@ -295,18 +327,46 @@
       }
       xhr.send(JSON.stringify(bodyToSend));
     });
+    //CUSTOMERS
+    let customersLink = document.querySelector('.input-customers');
+    customersLink.addEventListener('click', () => {
+      //window.alert('Hey Customers Link was clicked!');
+      document.querySelector('.customersFormDiv').style.display = 'block';
+    });
 
-      let customersLink = document.querySelector('.input-customers');
-      customersLink.addEventListener('click', () => {
-        //window.alert('Hey Customers Link was clicked!');
-        document.querySelector('.customersFormDiv').style.display = 'block';
-      });
+    let collapseCustomersButton = document.querySelector('.collapseCustomers');
+    collapseCustomersButton.addEventListener('click', () => {
+      document.querySelector('.customersFormDiv').style.display = 'none';
+      location.reload();
+    })
 
-      let collapseCustomerButton = document.querySelector('.collapseCustomer');
-      collapseCustomerButton.addEventListener('click', () => {
-        document.querySelector('.customersFormDiv').style.display = 'hidden';
-        location.reload();
-      })
+
+
+    //CARS
+    let carsLink = document.querySelector('.input-cars');
+    carsLink.addEventListener('click', () => {
+      document.querySelector('.carsFormDiv').style.display = 'block';
+    });
+
+    let collapseCarsButton = document.querySelector('.collapseCars');
+    collapseCarsButton.addEventListener('click', () => {
+      document.querySelector('.carsFormDiv').style.display = 'none';
+      location.reload();
+    })
+
+
+
+    //PARTS
+    let partsLink = document.querySelector('.input-parts');
+    partsLink.addEventListener('click', () => {
+      document.querySelector('.partsFormDiv').style.display = 'block';
+    });
+
+    let collapsePartsButton = document.querySelector('.collapseParts');
+    collapsePartsButton.addEventListener('click', () => {
+      document.querySelector('.partsFormDiv').style.display = 'none';
+      location.reload();
+    })
 
 
 
