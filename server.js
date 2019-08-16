@@ -8,7 +8,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 require('dotenv').config();
-const path = require('path');
+//const path = require('path');
 const PORT = 5000;
 
 const db = mysql.createConnection({
@@ -18,7 +18,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-require('./startup/prod')(app); // preparing for heroku
+//require('./startup/prod')(app); // preparing for heroku
 
 app.use(cors());
 app.use(express.json());
@@ -34,7 +34,7 @@ app.get('/test', (req, res) => {
 // modules & middlewares & db connection
 // write BELOW this line
 
-app
+
 
 // delete record from any table based on ID
 app.delete('/delete/:table/:id', (req, res) => {

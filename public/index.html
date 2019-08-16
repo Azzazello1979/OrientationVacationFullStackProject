@@ -11,6 +11,37 @@
 
 <body>
 
+  <div class="dropdown">
+    <button class="dropbtn">Input Data Dropdown</button>
+    <div class="dropdown-content">
+      <a class="input-customers" href="#">Customers</a>
+      <a class="input-cars" href="#">Cars</a>
+      <a class="input-parts" href="#">Parts</a>
+    </div>
+  </div>
+
+  <div class="customersFormDiv">
+    <button class="customersInputForm">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required autofocus placeholder="enter first name" />
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required placeholder="enter last name" />
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" required placeholder="enter address" />
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country" required placeholder="enter country" />
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" required placeholder="enter city" />
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state" required placeholder="enter state" />
+      <label for="email">em@il:</label>
+      <input type="text" id="email" name="email" required placeholder="enter email" />
+      <input type="submit" value="Save New Customer" />
+      <input class="collapseCustomer" type="submit" value="Collapse" />
+    </form>
+  </div>
+
+
   <h2>Add new stock:</h2>
   <form class="newStock">
     <label for="partName">part name</label>
@@ -29,7 +60,7 @@
     <input type="submit" value="ADD" />
   </form>
 
-  <hr>
+  </hr>
 
   <h2>Modify any data (not ID) in any table any column</h2>
   <form class="updateData">
@@ -62,7 +93,7 @@
     <input type="submit" value="UPDATE" />
   </form>
 
-  <hr>
+  </hr>
 
   <h2 class="allParts">All auto parts currently in database: </h2>
   <table class="partsTable">
@@ -207,6 +238,8 @@
     }
 
 
+    // 
+
     // add new stock
     let addStockForm = document.querySelector('.newStock');
     addStockForm.addEventListener('submit', (event) => {
@@ -263,7 +296,17 @@
       xhr.send(JSON.stringify(bodyToSend));
     });
 
+      let customersLink = document.querySelector('.input-customers');
+      customersLink.addEventListener('click', () => {
+        //window.alert('Hey Customers Link was clicked!');
+        document.querySelector('.customersFormDiv').style.display = 'block';
+      });
 
+      let collapseCustomerButton = document.querySelector('.collapseCustomer');
+      collapseCustomerButton.addEventListener('click', () => {
+        document.querySelector('.customersFormDiv').style.display = 'hidden';
+        location.reload();
+      })
 
 
 

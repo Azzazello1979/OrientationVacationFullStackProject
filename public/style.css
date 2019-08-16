@@ -5,6 +5,51 @@ body{
   align-items: center;
 }
 
+.dropbtn{
+  background-color: yellow;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.dropdown{
+  display:flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.dropdown-content{ /* hidden by default */
+  display: none;
+  background-color: white;
+  
+}
+
+.dropdown-content a{ /* links inside dropdown */
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+}
+
+/* change color of dropdown links on hover */
+.dropdown-content a:hover{background-color: green;}
+
+/* show dropdown menu on hover */
+.dropdown:hover .dropdown-content {display:block;}
+
+/* change background color of dropdown button when dropdown content is shown  */
+.dropdown:hover .dropbtn {background-color:grey;}
+
+
+.customersFormDiv{
+  display:none;
+}
+
+
+
+
 .newStock{
   display:flex;
   flex-direction: column;
