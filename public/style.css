@@ -50,7 +50,10 @@ body{
 }
 
 
-
+.customersInputForm{
+  display:block;
+  background-color: white;
+}
 
 .newStock{
   display:flex;
@@ -60,7 +63,7 @@ body{
   
 }
 
-.partsTable, .newStock, .updateData{
+.partsTable, .newStock, .updateData .customersInputForm{
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 20px;
