@@ -130,24 +130,58 @@ app.put('/post/:table/:id/:column/:newValue', (req, res) => {
 // you send key-value pairs in the req.body, but instead you can also send
 // info in the URL: req.query & req.params
 // sending key-value pair in the URL is req.query
-app.post('/post', (req,res) => {
+app.post('/post', (req, res) => {
   let reqObj = req.query;
   res.status(200).send(reqObj);
 })
 
 // sending a single value in the URL is req.params
-app.post('/post/:requestParameter', (req,res) => {
+app.post('/post/:requestParameter', (req, res) => {
   let requestParameter = req.params.requestParameter;
   res.status(200).send(requestParameter);
 })
 
-// insert records into "parts" table. ( specify partName, universalCode, starting stock in request )
+
+
+// insert record into CUSTOMERS table
+app.post('/customers', (req, res) => {
+  // 1st lets see if customer with this email already exists (email is the uniq identifier for customer)
+  db.query(`SELECT * FROM customers WHERE email = "${req.body.email}"`,
+    (err, rows) => {
+      if (err) {
+        //console.log('DB error with SELECT');
+        return res.status(500).json(err);
+      } else {
+        console.log(rows);
+        if (rows.length > 0) {
+          //console.log('A customer with the same email is already registered, please choose a different email');
+          return res.status(400).json({ 'message': 'A customer with the same email is already registered, please choose a different email' });
+        } else {
+          db.query(`INSERT INTO customers (first_name, last_name, address, country, city, state, email) VALUES ( "${req.body.first_name}", "${req.body.last_name}", "${req.body.address}", "${req.body.country}", "${req.body.city}", "${req.body.state}", "${req.body.email}" );`,
+            (err, OKPacket) => {
+              if (err) {
+                //console.log('DB error with INSERT INTO');
+                return res.status(500).json(err);
+              } else {
+                res.status(200).json({ 'message': 'OK...new customer record inserted.' });
+                //console.log(OKPacket);
+              }
+            }
+          )
+        }
+      }
+    }
+  )
+});
+
+
+// insert records into "PARTS" table. ( specify partName, universalCode, starting stock in request )
 app.post('/post', (req, res) => {
   // first lets see if a part with the same universalCode already exists, because the we refuse insertion
   db.query(`SELECT * FROM parts WHERE universalCode = ${req.body.universalCode}`,
     (err, rows) => {
       if (err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       } else {
         if (rows.length > 0) { // IMPORTANT !!! it is spelled: length
           return res.status(400).json({ info: 'A part with this universal code already exists, please use a different code!' });

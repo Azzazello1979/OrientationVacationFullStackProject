@@ -22,10 +22,10 @@
 
   <div class="customersFormDiv">
     <form class="customersInputForm">
-      <label for="firstName">First Name:</label>
-      <input type="text" id="firstName" name="firstName" required autofocus placeholder="enter first name" />
-      <label for="lastName">Last Name:</label>
-      <input type="text" id="lastName" name="lastName" required placeholder="enter last name" />
+      <label for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" required autofocus placeholder="enter first name" />
+      <label for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" required placeholder="enter last name" />
       <label for="address">Address:</label>
       <input type="text" id="address" name="address" required placeholder="enter address" />
       <label for="country">Country:</label>
@@ -35,7 +35,7 @@
       <label for="state">State:</label>
       <input type="text" id="state" name="state" required placeholder="enter state" />
       <label for="email">em@il:</label>
-      <input type="text" id="email" name="email" required placeholder="enter email" />
+      <input type="email" id="email" name="email" required placeholder="enter email" />
       <input type="submit" value="Save New Customer" />
       <input class="collapseCustomers" type="submit" value="Collapse" />
     </form>
@@ -270,9 +270,44 @@
     }
 
 
-    // 
 
-    // add new stock
+
+
+
+    // add data to CUSTOMERS table 
+    let addCustomerForm = document.querySelector('.customersInputForm');
+    addCustomerForm.addEventListener('submit', (event) => {
+      let formData = event.target.elements;
+      console.log(formData.email.value);
+      let bodyToSend = {
+        first_name: formData.first_name.value,
+        last_name: formData.last_name.value,
+        address: formData.address.value,
+        country: formData.country.value,
+        city: formData.city.value,
+        state: formData.state.value,
+        email: formData.email.value
+      };
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:5000/customers', true);
+      xhr.setRequestHeader('Content-Type','application/json');
+      xhr.onload = function() {
+        let message = JSON.parse(this.response);
+        window.alert(message.info);
+      }
+      xhr.send(JSON.stringify(bodyToSend));
+
+    });
+
+
+
+
+
+
+
+
+    // add new stock to PARTS table
     let addStockForm = document.querySelector('.newStock');
     addStockForm.addEventListener('submit', (event) => {
       //event.preventDefault(); //<-- only used for de-bugging
@@ -291,8 +326,6 @@
       xhr.onload = function () {
         let message = JSON.parse(this.response);
         window.alert(message.info);
-
-
       }
       xhr.send(JSON.stringify(bodyToSend));
     });
