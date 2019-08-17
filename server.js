@@ -178,13 +178,15 @@ app.post('/customers', (req, res) => {
 // insert record into CAR table (car records are not unique!)
 app.post('/cars', (req, res) => {
   db.query(`INSERT INTO cars ( make, model, year, price, stock, description ) VALUES ( "${req.body.make}",
-  "${model}", ${year}, ${price}, ${stock}, "${description}" );`,
+  "${req.body.model}", ${req.body.year}, ${req.body.price}, ${req.body.stock}, "${req.body.description}" );`,
     (err, OKpacket) => {
       if (err) {
+        //console.log(err.message);
         res.status(500).json(err);
       } else {
-        res.status(200).json({ info: 'OK ... new car record inserted.' });
-        return console.log(OKpacket);
+        //console.log(OKpacket);
+        return res.status(200).json({ info: 'OK ... new car record inserted.' });
+         
       }
     }
   )
