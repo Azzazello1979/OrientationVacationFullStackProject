@@ -61,7 +61,7 @@ app.delete('/delete/:table/:id', (req, res) => {
 });
 
 
-// show all parts from db on index page
+// show all PARTS from db on index page
 app.get('/parts', (req, res) => {
   db.query('SELECT * FROM parts',
     (err, records) => {
@@ -71,10 +71,13 @@ app.get('/parts', (req, res) => {
         res.status(200).json(records);
       }
     }
-
   );
-
 });
+
+
+
+
+
 
 
 // update any data in any table
