@@ -146,6 +146,19 @@
 
   <script>
 
+    // middlewares:
+
+    // capitalizes 1st letter and rest is lowercase
+    function toNoun(input){
+      return (input).toLowerCase().charAt(0).toUpperCase() + 
+      (input).toLowerCase().slice(1)
+    }
+
+
+
+
+
+
 
     //on load of window, show all auto parts in database
     window.onload = () => {
@@ -272,21 +285,28 @@
 
 
 
-
-
+    // target html form, attach event listener 'submit', save form data in object, xhr send to endpoint
+    //
     // add data to CUSTOMERS table 
     let addCustomerForm = document.querySelector('.customersInputForm');
     addCustomerForm.addEventListener('submit', (event) => {
       let formData = event.target.elements;
-      console.log(formData.email.value);
+
+      let validFirstName = toNoun(formData.first_name.value);
+      let validLastName = toNoun(formData.last_name.value);
+      let validCountry = toNoun(formData.country.value);
+      let validCity = toNoun(formData.city.value);
+      let validState = (formData.state.value).toUpperCase();
+      let validEmail = (formData.email.value).toLowerCase();
+
       let bodyToSend = {
-        first_name: formData.first_name.value,
-        last_name: formData.last_name.value,
+        first_name: validFirstName,
+        last_name: validLastName,
         address: formData.address.value,
-        country: formData.country.value,
-        city: formData.city.value,
-        state: formData.state.value,
-        email: formData.email.value
+        country: validCountry,
+        city: validCity,
+        state: validState,
+        email: validEmail
       };
 
       let xhr = new XMLHttpRequest();
@@ -300,20 +320,43 @@
 
     });
 
+    // add data to CARS table 
+    let addCarForm = document.querySelector('.carsInputForm');
+    addCarForm.addEventListener('submit', (event) => {
+      let formData = event.target.elements;
 
+      let validMake = toNoun(formData.make.value);
+      let validModel = toNoun(formData.model.value);
 
+      let bodyToSend = {
+        make: validMake,
+        model: validModel,
+        year: formData.year.value,
+        price: formData.price.value,
+        stock: formData.stock.value
+      };
 
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:5000/cars', true);
+      xhr.setRequestHeader('Content-Type','application/json');
+      xhr.onload = function() {
+        let message = JSON.parse(this.response);
+        window.alert(message.info);
+      }
+      xhr.send(JSON.stringify(bodyToSend));
 
+    });
 
-
-
-    // add new stock to PARTS table
-    let addStockForm = document.querySelector('.newStock');
+    // add data to PARTS table
+    let addStockForm = document.querySelector('.partsInputForm');
     addStockForm.addEventListener('submit', (event) => {
       //event.preventDefault(); //<-- only used for de-bugging
       let formData = event.target.elements;
+
+      let validPartName = (formData.partName.value).toLowerCase();
+
       let bodyToSend = {
-        partName: formData.partName.value,
+        partName: validPartName,
         universalCode: formData.universalCode.value,
         partPrice: formData.partPrice.value,
         stock: formData.stock.value
@@ -329,6 +372,13 @@
       }
       xhr.send(JSON.stringify(bodyToSend));
     });
+
+
+
+
+
+
+
 
     // update any data type in any table any column, based on record ID
     let updateDataForm = document.querySelector('.updateData');
@@ -360,6 +410,15 @@
       }
       xhr.send(JSON.stringify(bodyToSend));
     });
+
+
+
+
+
+
+
+    // OPEN-COLLAPSE buttons for input forms
+    //
     //CUSTOMERS
     let customersLink = document.querySelector('.input-customers');
     customersLink.addEventListener('click', () => {
@@ -373,8 +432,6 @@
       location.reload();
     })
 
-
-
     //CARS
     let carsLink = document.querySelector('.input-cars');
     carsLink.addEventListener('click', () => {
@@ -386,8 +443,6 @@
       document.querySelector('.carsFormDiv').style.display = 'none';
       location.reload();
     })
-
-
 
     //PARTS
     let partsLink = document.querySelector('.input-parts');

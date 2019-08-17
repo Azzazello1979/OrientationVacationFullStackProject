@@ -152,7 +152,7 @@ app.post('/customers', (req, res) => {
         //console.log('DB error with SELECT');
         return res.status(500).json(err);
       } else {
-        console.log(rows);
+        //console.log(rows);
         if (rows.length > 0) {
           //console.log('A customer with the same email is already registered, please choose a different email');
           return res.status(400).json({ 'message': 'A customer with the same email is already registered, please choose a different email' });
@@ -163,7 +163,7 @@ app.post('/customers', (req, res) => {
                 //console.log('DB error with INSERT INTO');
                 return res.status(500).json(err);
               } else {
-                res.status(200).json({ 'message': 'OK...new customer record inserted.' });
+                res.status(200).json({ info: 'OK...new customer record inserted.' });
                 //console.log(OKPacket);
               }
             }
@@ -175,8 +175,24 @@ app.post('/customers', (req, res) => {
 });
 
 
-// insert records into "PARTS" table. ( specify partName, universalCode, starting stock in request )
-app.post('/post', (req, res) => {
+// insert record into CAR table (car records are not unique!)
+app.post('/cars', (req, res) => {
+  db.query(`INSERT INTO cars ( make, model, year, price, stock, description ) VALUES ( "${req.body.make}",
+  "${model}", ${year}, ${price}, ${stock}, "${description}" );`,
+    (err, OKpacket) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200).json({ info: 'OK ... new car record inserted.' });
+        return console.log(OKpacket);
+      }
+    }
+  )
+})
+
+
+// insert record into PARTS table. ( specify partName, universalCode, starting stock in request )
+app.post('/parts', (req, res) => {
   // first lets see if a part with the same universalCode already exists, because the we refuse insertion
   db.query(`SELECT * FROM parts WHERE universalCode = ${req.body.universalCode}`,
     (err, rows) => {
