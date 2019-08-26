@@ -76,17 +76,17 @@ body{
   
 }
 
-.partsTable, .newStock, .updateData{
+.partsTable, .carsTable, .newStock, .updateData{
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 20px;
 }
 
-.partsTable thead{
+.partsTable, .carsTable, thead{
   font-weight: bold;
 }
 
-.partsTable td{
+.partsTable, .carsTable, td{
   padding: 5px;
 }
 
