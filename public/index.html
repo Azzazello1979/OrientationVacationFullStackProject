@@ -75,7 +75,7 @@
     </form>
   </div>
 
-  
+
 
   <h2>Modify any data (not ID) in any table any column</h2>
   <form class="updateData">
@@ -127,7 +127,31 @@
     </tbody>
   </table>
 
+
+  <h2 class="allCars">All cars currently in database: </h2>
+  <table class="carsTable">
+    <thead>
+      <tr>
+        <td>ID:</td>
+        <td>make:</td>
+        <td>model:</td>
+        <td>year:</td>
+        <td>price:</td>
+        <td>current stock:</td>
+        <td>description:</td>
+        <td>delete record:</td>
+      </tr>
+    </thead>
+    <tbody class="cars">
+
+    </tbody>
+  </table>
+
+
   <script>
+    // constants:
+    const backUri = 'http://localhost:5000';
+
 
     // middlewares:
 
@@ -143,15 +167,17 @@
 
 
 
-    //on load of window, show all auto parts in database
+    //on load of window, show all auto parts and cars in database
     window.onload = () => {
+
+      showCars();
 
       let countParts = document.querySelector('.allParts');
       countPartsQuery();
 
       function countPartsQuery() {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:5000/parts', true);
+        xhr.open('GET', `${backUri}/parts`, true);
         xhr.onload = function () {
           let rows = JSON.parse(this.response); //same as xhr.response
           //console.log(rows.length);
@@ -161,43 +187,12 @@
       }
 
 
-
+      // fills up 'parts' table body ...
       let partsToFill = document.querySelector('.parts');
       let xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://localhost:5000/parts', true);
+      xhr.open('GET', `${backUri}/parts`, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      /* xhr.onload = (event) => {
-        
-        if (event.target.status === 200 && event.target.readyState === 4) {
-          console.log(event);
-          let partsTable = JSON.parse(xhr.response);
-          console.log(partsTable);
-          partsTable.forEach(part => {
-            let newRow = document.createElement('tr');
 
-            let newPartName = document.createElement('td');
-            newPartName.textContent = part.partName;
-
-            let newUniversalCode = document.createElement('td');
-            newUniversalCode.textContent = part.universalCode;
-
-            let newStock = document.createElement('td');
-            newStock.textContent = part.stock;
-
-            newRow.appendChild(newPartName);
-            newRow.appendChild(newUniversalCode);
-            newRow.appendChild(newStock);
-
-            partsToFill.appendChild(newRow);
-
-          });
-
-        }else{
-          console.log(`Error with xhr connection. STATUS: ${event.target.status}, READYSTATE: ${event.target.readyState}.`);
-        }
-
-        
-      } */
 
       xhr.onload = function () {
 
@@ -231,7 +226,7 @@
             newDeleteButton.addEventListener('click', (event) => {
 
               let xhr = new XMLHttpRequest();
-              xhr.open('DELETE', `http://localhost:5000/delete/parts/${part.id}`, true);
+              xhr.open('DELETE', `${backUri}/delete/parts/${part.id}`, true);
               xhr.onload = function () {
                 window.alert('Record successfully deleted!');
                 location.reload(); //this refreshes the window
@@ -259,6 +254,72 @@
 
       xhr.send();
     };
+
+    //fills up 'cars' table body ...
+    function showCars() {
+      let carsToFill = document.querySelector('.cars');
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', `${backUri}/cars`, true);
+      xhr.setRequestHeader('Content-Type','application-json');
+      xhr.onload = function(){
+        if(this.status === 200 & this.readyState === 4){
+          let carsTable = JSON.parse(this.response);
+          console.log(carsTable);
+          carsTable.forEach(car => {
+
+           let newRow = document.createElement('tr');
+
+           let newID = document.createElement('td');
+           newID.textContent = car.id;
+
+           let newMake = document.createElement('td');
+           newMake.textContent = car.make;
+
+           let newModel = document.createElement('td');
+           newModel.textContent = car.model;
+
+           let newYear = document.createElement('td');
+           newYear.textContent = car.year;
+
+           let newPrice = document.createElement('td');
+           newPrice.textContent = car.price;
+
+           let newStock = document.createElement('td');
+           newStock.textContent = car.stock;
+
+           let newDescription = document.createElement('td');
+           newDescription.textContent = car.description;   
+
+            let cols = [newID, newMake, newModel, newYear, newPrice, newStock, newDescription];
+            
+            /*for(let i=0 ; i<cols.length ; i++){
+              newRow.appendChild(cols[i]);
+            }*/
+
+            cols.forEach(e=> newRow.appendChild(e));
+            carsToFill.appendChild(newRow);
+
+          });
+
+
+
+        } else {
+          console.log(`Error with xhr connection. STATUS: ${this.status}, READYSTATE: ${this.readyState}.`);
+        }
+      }
+      xhr.send();
+    };
+
+
+
+
+
+
+
+
+
+
+
 
     // this is needed for the range slider @ "Add new stock:"
     function updateTextInput(x) {
@@ -293,7 +354,7 @@
       };
 
       let xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://localhost:5000/customers', true);
+      xhr.open('POST', `${backUri}/customers`, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function () {
         let message = JSON.parse(this.response);
@@ -323,7 +384,7 @@
       if (formData.description.value.length <= 200) {
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:5000/cars', true);
+        xhr.open('POST', `${backUri}/cars`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
           let message = JSON.parse(this.response);
@@ -354,7 +415,7 @@
       };
 
       let xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://localhost:5000/parts', true);
+      xhr.open('POST', `${backUri}/parts`, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
 
       xhr.onload = function () {
@@ -390,7 +451,7 @@
       let newValue = formData.newValue.value;
 
       let xhr = new XMLHttpRequest();
-      xhr.open('PUT', `http://localhost:5000/post/${table}/${id}/${column}/${newValue}`, true);
+      xhr.open('PUT', `${backUri}/update/${table}/${id}/${column}/${newValue}`, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
 
       xhr.onload = function () {
